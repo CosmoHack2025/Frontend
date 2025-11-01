@@ -116,7 +116,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 flex items-center"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center cursor-pointer"
               >
                 Get Started as Patient
                 <FaArrowRight className="ml-2" />
@@ -127,7 +127,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center"
+                className="border-2 border-green-500 hover:border-green-600 text-green-500 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center cursor-pointer"
               >
                 Join as Doctor
                 <FaUserMd className="ml-2" />
@@ -351,7 +351,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300"
+                className="border-2 border-green-500 hover:border-green-600 text-green-500 px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300"
               >
                 Learn More
               </motion.button>
