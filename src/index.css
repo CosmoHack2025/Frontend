@@ -2,30 +2,49 @@
 
 /* Healthcare Color Palette & Global Styles */
 :root {
-  --primary-blue: #2563eb;
-  --primary-teal: #0d9488;
-  --secondary-blue: #1d4ed8;
-  --accent-green: #10b981;
-  --warning-yellow: #f59e0b;
-  --error-red: #ef4444;
-  --success-green: #22c55e;
+  --primary-pink: #ec4899;
+  --secondary-pink: #f472b6;
+  --light-pink: #fbcfe8;
+  --primary-green: #22c55e;
+  --secondary-green: #4ade80;
+  --light-green: #bbf7d0;
+  --primary-blue: #3b82f6;
+  --secondary-blue: #60a5fa;
+  --light-blue: #bfdbfe;
   --neutral-gray: #6b7280;
   --light-gray: #f8fafc;
   --white: #ffffff;
   --dark-gray: #1f2937;
 }
 
-/* Custom Healthcare Gradients */
-.bg-healthcare-primary {
-  background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+@font-face {
+  font-family: 'NunitoCustom';
+  src: url('/fonts/Nunito-Regular.ttf') format('truetype'),
+       url('/fonts/Nunito-Black.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-.bg-healthcare-light {
-  background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+
+@theme {
+    --font-nunito: 'NunitoCustom';
+}
+
+/* Custom Healthcare Solid Backgrounds */
+.bg-healthcare-primary {
+  background: var(--primary-pink);
+}
+
+.bg-healthcare-secondary {
+  background: var(--primary-green);
 }
 
 .bg-healthcare-accent {
-  background: linear-gradient(135deg, var(--accent-green), var(--primary-teal));
+  background: var(--primary-blue);
+}
+
+.bg-healthcare-light {
+  background: var(--light-gray);
 }
 
 /* Smooth Scrolling */
@@ -43,12 +62,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+  background: var(--primary-pink);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--secondary-blue), var(--primary-teal));
+  background: var(--secondary-pink);
 }
 
 /* Focus States for Accessibility */
@@ -56,7 +75,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--primary-blue);
+  outline: 2px solid var(--primary-pink);
   outline-offset: 2px;
 }
 
@@ -68,7 +87,7 @@ textarea:focus-visible {
 
 .healthcare-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
 }
 
 .healthcare-button:active {
@@ -108,21 +127,21 @@ textarea:focus-visible {
 
 /* Risk Level Indicators */
 .risk-high {
-  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  background: #fecaca;
   border-color: #f87171;
   color: #dc2626;
 }
 
 .risk-medium {
-  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  background: #fed7aa;
   border-color: #fb923c;
   color: #ea580c;
 }
 
 .risk-low {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-  border-color: #4ade80;
-  color: #16a34a;
+  background: var(--light-green);
+  border-color: var(--secondary-green);
+  color: var(--primary-green);
 }
 
 /* Upload Drag and Drop Styling */
@@ -133,8 +152,8 @@ textarea:focus-visible {
 
 .upload-area:hover,
 .upload-area.drag-over {
-  border-color: var(--primary-blue);
-  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+  border-color: var(--primary-pink);
+  background: var(--light-pink);
 }
 
 /* Healthcare Form Styling */
@@ -144,24 +163,24 @@ textarea:focus-visible {
 }
 
 .healthcare-input:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
 /* Medical Report Status Badges */
 .status-analyzing {
-  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-  color: #1d4ed8;
+  background: var(--light-blue);
+  color: var(--primary-blue);
   animation: pulse 2s infinite;
 }
 
 .status-complete {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-  color: #16a34a;
+  background: var(--light-green);
+  color: var(--primary-green);
 }
 
 .status-error {
-  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  background: #fecaca;
   color: #dc2626;
 }
 

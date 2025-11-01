@@ -25,7 +25,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -38,7 +38,7 @@ const LoginPage = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="flex items-center justify-center w-20 h-20 bg-linear-to-r from-blue-600 to-teal-600 rounded-full mx-auto mb-4"
+            className="flex items-center justify-center w-20 h-20 bg-pink-500 rounded-full mx-auto mb-4"
           >
             <FaHeart className="text-3xl text-white" />
           </motion.div>
@@ -54,7 +54,7 @@ const LoginPage = () => {
               onClick={() => setUserType('patient')}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 ${
                 userType === 'patient'
-                  ? 'bg-white shadow-md text-blue-600'
+                  ? 'bg-white shadow-md text-pink-600'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -66,7 +66,7 @@ const LoginPage = () => {
               onClick={() => setUserType('doctor')}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 ${
                 userType === 'doctor'
-                  ? 'bg-white shadow-md text-blue-600'
+                  ? 'bg-white shadow-md text-green-600'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -92,7 +92,7 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your email"
                 />
               </div>
@@ -114,7 +114,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your password"
                 />
                 <button
@@ -138,7 +138,7 @@ const LoginPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Remember me
@@ -146,7 +146,7 @@ const LoginPage = () => {
               </div>
               <Link
                 to="/forgot-password"
-                className="text-sm text-blue-600 hover:text-blue-500 transition-colors duration-300"
+                className="text-sm text-green-600 hover:text-green-500 transition-colors duration-300"
               >
                 Forgot password?
               </Link>
@@ -157,7 +157,7 @@ const LoginPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full bg-linear-to-r from-blue-600 to-teal-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
             >
               Sign In as {userType === 'patient' ? 'Patient' : 'Doctor'}
             </motion.button>
@@ -169,7 +169,7 @@ const LoginPage = () => {
               Don't have an account?{' '}
               <Link
                 to="/signup"
-                className="text-blue-600 hover:text-blue-500 font-semibold transition-colors duration-300"
+                className="text-green-600 hover:text-green-500 font-semibold transition-colors duration-300"
               >
                 Sign up here
               </Link>

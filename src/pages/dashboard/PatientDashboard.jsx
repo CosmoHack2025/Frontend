@@ -104,7 +104,7 @@ const PatientDashboard = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'analyzed': return 'text-green-600';
-      case 'processing': return 'text-blue-600';
+      case 'processing': return 'text-pink-600';
       case 'error': return 'text-red-600';
       default: return 'text-gray-600';
     }
@@ -121,7 +121,7 @@ const PatientDashboard = () => {
           className="mb-8"
         >
           <div className="flex items-center mb-4">
-            <div className="flex items-center justify-center w-12 h-12 bg-linear-to-r from-blue-600 to-teal-600 rounded-full mr-4">
+            <div className="flex items-center justify-center w-12 h-12 bg-green-500 rounded-full mr-4">
               <FaUser className="text-white text-xl" />
             </div>
             <div>
@@ -141,7 +141,7 @@ const PatientDashboard = () => {
           >
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <FaUpload className="mr-3 text-blue-600" />
+                <FaUpload className="mr-3 text-pink-600" />
                 Upload Report
               </h2>
               
@@ -171,14 +171,14 @@ const PatientDashboard = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 p-4 bg-blue-50 rounded-lg"
                 >
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-pink-800">
                     Selected: {selectedFile.name}
                   </p>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleUpload}
-                    className="mt-3 w-full bg-linear-to-r from-blue-600 to-teal-600 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+                    className="mt-3 w-full bg-green-500 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
                   >
                     Upload & Analyze
                   </motion.button>
@@ -188,8 +188,8 @@ const PatientDashboard = () => {
               {/* Quick Stats */}
               <div className="mt-8 grid grid-cols-2 gap-4">
                 <div className="bg-blue-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-blue-600">{uploadedReports.length}</div>
-                  <div className="text-sm text-blue-800">Total Reports</div>
+                  <div className="text-2xl font-bold text-pink-600">{uploadedReports.length}</div>
+                  <div className="text-sm text-pink-800">Total Reports</div>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg text-center">
                   <div className="text-2xl font-bold text-green-600">
@@ -211,7 +211,7 @@ const PatientDashboard = () => {
             {/* Recent Reports */}
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <FaChartLine className="mr-3 text-blue-600" />
+                <FaChartLine className="mr-3 text-pink-600" />
                 Your Reports & Predictions
               </h2>
               
@@ -262,7 +262,7 @@ const PatientDashboard = () => {
                             return (
                               <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                                 <div className="flex items-center">
-                                  <CategoryIcon className="text-blue-600 mr-3" />
+                                  <CategoryIcon className="text-pink-600 mr-3" />
                                   <div>
                                     <div className="font-medium text-gray-800">{prediction.disease}</div>
                                     <div className="text-sm text-gray-600">{prediction.category}</div>
@@ -279,7 +279,7 @@ const PatientDashboard = () => {
                           })}
                           
                           <div className="flex space-x-3 mt-4">
-                            <button className="flex items-center text-blue-600 hover:text-blue-700 text-sm">
+                            <button className="flex items-center text-pink-600 hover:text-pink-700 text-sm">
                               <FaDownload className="mr-1" />
                               Download Report
                             </button>
@@ -294,7 +294,7 @@ const PatientDashboard = () => {
                       {report.status === 'processing' && (
                         <div className="flex items-center justify-center py-8">
                           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-                          <span className="text-blue-600">Analyzing your report...</span>
+                          <span className="text-pink-600">Analyzing your report...</span>
                         </div>
                       )}
                     </motion.div>
@@ -334,7 +334,7 @@ const PatientDashboard = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="flex items-center">
-                        <FaEye className="text-blue-500 mr-2" />
+                        <FaEye className="text-pink-500 mr-2" />
                         Vision
                       </span>
                       <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">Low</span>

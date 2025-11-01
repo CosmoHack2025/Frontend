@@ -23,25 +23,25 @@ const HomePage = () => {
       icon: FaHeartbeat,
       title: "Heart Disease Prediction",
       description: "Advanced AI algorithms analyze your cardiovascular health data to predict potential heart conditions.",
-      color: "from-red-500 to-pink-500"
+      color: "bg-pink-500"
     },
     {
       icon: FaBrain,
       title: "Neurological Analysis",
       description: "Early detection of neurological disorders through comprehensive brain health assessment.",
-      color: "from-purple-500 to-indigo-500"
+      color: "bg-green-500"
     },
     {
       icon: FaEye,
       title: "Vision Health Monitoring",
       description: "Eye disease prediction using retinal imaging and advanced computer vision technology.",
-      color: "from-blue-500 to-cyan-500"
+      color: "bg-blue-500"
     },
     {
       icon: FaLungs,
       title: "Respiratory Health",
       description: "Pulmonary function analysis to detect early signs of respiratory conditions.",
-      color: "from-teal-500 to-green-500"
+      color: "bg-green-600"
     }
   ];
 
@@ -77,7 +77,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <motion.section 
         initial={{ opacity: 0 }}
@@ -85,7 +85,7 @@ const HomePage = () => {
         transition={{ duration: 1 }}
         className="relative py-20 px-4 text-center overflow-hidden"
       >
-        <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-blue-700 to-teal-600 opacity-10"></div>
+        <div className="absolute inset-0 bg-pink-500 opacity-5"></div>
         <div className="relative max-w-6xl mx-auto">
           <motion.h1 
             initial={{ y: 30, opacity: 0 }}
@@ -94,7 +94,7 @@ const HomePage = () => {
             className="text-5xl md:text-7xl font-bold text-gray-800 mb-6"
           >
             Predict Your Health,
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-teal-600"> Prevent Disease</span>
+            <span className="text-pink-600"> Prevent Disease</span>
           </motion.h1>
           
           <motion.p 
@@ -116,7 +116,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-linear-to-r from-blue-600 to-teal-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 flex items-center"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300 flex items-center"
               >
                 Get Started as Patient
                 <FaArrowRight className="ml-2" />
@@ -127,7 +127,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-all duration-300 flex items-center"
+                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center"
               >
                 Join as Doctor
                 <FaUserMd className="ml-2" />
@@ -164,7 +164,7 @@ const HomePage = () => {
                 whileHover={{ scale: 1.05, rotateY: 5 }}
                 className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
               >
-                <div className={`flex items-center justify-center w-16 h-16 bg-linear-to-r ${feature.color} rounded-full mb-6 mx-auto`}>
+                <div className={`flex items-center justify-center w-16 h-16 ${feature.color} rounded-full mb-6 mx-auto`}>
                   <feature.icon className="text-2xl text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">{feature.title}</h3>
@@ -181,7 +181,7 @@ const HomePage = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-20 px-4 bg-linear-to-r from-gray-50 to-blue-50"
+        className="py-20 px-4 bg-blue-50"
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -197,7 +197,7 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="flex items-center justify-center w-20 h-20 bg-linear-to-r from-blue-500 to-teal-500 rounded-full mb-6 mx-auto">
+              <div className="flex items-center justify-center w-20 h-20 bg-blue-500 rounded-full mb-6 mx-auto">
                 <FaUpload className="text-3xl text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">1. Upload Reports</h3>
@@ -213,7 +213,7 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="flex items-center justify-center w-20 h-20 bg-linear-to-r from-purple-500 to-pink-500 rounded-full mb-6 mx-auto">
+              <div className="flex items-center justify-center w-20 h-20 bg-pink-500 rounded-full mb-6 mx-auto">
                 <FaBrain className="text-3xl text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">2. AI Analysis</h3>
@@ -229,7 +229,7 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="flex items-center justify-center w-20 h-20 bg-linear-to-r from-green-500 to-blue-500 rounded-full mb-6 mx-auto">
+              <div className="flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6 mx-auto">
                 <FaChartLine className="text-3xl text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">3. Get Predictions</h3>
@@ -250,7 +250,7 @@ const HomePage = () => {
         className="py-20 px-4"
       >
         <div className="max-w-6xl mx-auto">
-          <div className="bg-linear-to-r from-blue-600 via-blue-700 to-teal-600 rounded-3xl p-12 text-white text-center">
+          <div className="bg-blue-600 rounded-3xl p-12 text-white text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-12">Trusted by Healthcare Professionals</h2>
             <div className="grid md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
@@ -278,7 +278,7 @@ const HomePage = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-20 px-4 bg-linear-to-r from-gray-50 to-blue-50"
+        className="py-20 px-4 bg-green-50"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -341,7 +341,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-linear-to-r from-blue-600 to-teal-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300"
               >
                 Start Your Health Journey
               </motion.button>
@@ -351,7 +351,7 @@ const HomePage = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-all duration-300"
+                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300"
               >
                 Learn More
               </motion.button>

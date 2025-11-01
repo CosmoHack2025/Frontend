@@ -9,6 +9,7 @@ import LoginPage from './pages/auth/LoginPage.jsx'
 import SignupPage from './pages/auth/SignupPage.jsx'
 import PatientDashboard from './pages/dashboard/PatientDashboard.jsx'
 import DoctorDashboard from './pages/dashboard/DoctorDashboard.jsx'
+import ProfileHolder from './components/ProfileHolder.jsx'
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: '/doctor-dashboard',
         element: <DoctorDashboard />,
+      },
+      {
+        path: '/profile',
+        element: <ProfileHolder />,
       }
     ]
   },

@@ -16,7 +16,7 @@ const SignupPage = () => {
     confirmPassword: '',
     specialization: '', // For doctors
     licenseNumber: '', // For doctors
-    medicalId: '' // For patients
+    gender: '' // For patients
   });
 
   const handleInputChange = (e) => {
@@ -38,7 +38,7 @@ const SignupPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ const SignupPage = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="flex items-center justify-center w-20 h-20 bg-linear-to-r from-blue-600 to-teal-600 rounded-full mx-auto mb-4"
+            className="flex items-center justify-center w-20 h-20 bg-pink-500 rounded-full mx-auto mb-4"
           >
             <FaHeart className="text-3xl text-white" />
           </motion.div>
@@ -67,7 +67,7 @@ const SignupPage = () => {
               onClick={() => setUserType('patient')}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 ${
                 userType === 'patient'
-                  ? 'bg-white shadow-md text-blue-600'
+                  ? 'bg-white shadow-md text-pink-600'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -79,7 +79,7 @@ const SignupPage = () => {
               onClick={() => setUserType('doctor')}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg transition-all duration-300 ${
                 userType === 'doctor'
-                  ? 'bg-white shadow-md text-blue-600'
+                  ? 'bg-white shadow-md text-green-600'
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
@@ -102,7 +102,7 @@ const SignupPage = () => {
                   required
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="John"
                 />
               </div>
@@ -117,7 +117,7 @@ const SignupPage = () => {
                   required
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="Doe"
                 />
               </div>
@@ -139,7 +139,7 @@ const SignupPage = () => {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="john@example.com"
                 />
               </div>
@@ -161,7 +161,7 @@ const SignupPage = () => {
                   required
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -180,7 +180,7 @@ const SignupPage = () => {
                     required
                     value={formData.specialization}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   >
                     <option value="">Select Specialization</option>
                     {specializations.map((spec) => (
@@ -206,7 +206,7 @@ const SignupPage = () => {
                       required
                       value={formData.licenseNumber}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                       placeholder="MD123456789"
                     />
                   </div>
@@ -217,23 +217,22 @@ const SignupPage = () => {
             {/* Patient-specific fields */}
             {userType === 'patient' && (
               <div>
-                <label htmlFor="medicalId" className="block text-sm font-medium text-gray-700 mb-2">
-                  Medical ID (Optional)
+                <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
+                  Gender
                 </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <FaIdCard className="text-gray-400" />
-                  </div>
-                  <input
-                    id="medicalId"
-                    name="medicalId"
-                    type="text"
-                    value={formData.medicalId}
-                    onChange={handleInputChange}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    placeholder="P123456789"
-                  />
-                </div>
+                <select
+                  id="gender"
+                  name="gender"
+                  required
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
             )}
 
@@ -253,7 +252,7 @@ const SignupPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="Create a strong password"
                 />
                 <button
@@ -285,7 +284,7 @@ const SignupPage = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
                   placeholder="Confirm your password"
                 />
                 <button
@@ -309,15 +308,15 @@ const SignupPage = () => {
                 name="terms"
                 type="checkbox"
                 required
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                 I agree to the{' '}
-                <Link to="/terms" className="text-blue-600 hover:text-blue-500">
+                <Link to="/terms" className="text-pink-600 hover:text-pink-500">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
+                <Link to="/privacy" className="text-pink-600 hover:text-pink-500">
                   Privacy Policy
                 </Link>
               </label>
@@ -328,7 +327,7 @@ const SignupPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full bg-linear-to-r from-blue-600 to-teal-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
             >
               Create {userType === 'patient' ? 'Patient' : 'Doctor'} Account
             </motion.button>
@@ -340,7 +339,7 @@ const SignupPage = () => {
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-blue-600 hover:text-blue-500 font-semibold transition-colors duration-300"
+                className="text-pink-600 hover:text-pink-500 font-semibold transition-colors duration-300"
               >
                 Sign in here
               </Link>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaHeart, FaBars, FaTimes, FaUserMd, FaUser, FaHome, FaInfoCircle } from 'react-icons/fa';
+import { FaHeart, FaBars, FaTimes, FaUserMd, FaUser, FaHome, FaInfoCircle, FaPlusCircle } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
 function Navbar() {
@@ -10,6 +10,7 @@ function Navbar() {
   const navItems = [
     { name: 'Home', path: '/', icon: FaHome },
     { name: 'About', path: '/about', icon: FaInfoCircle },
+    { name: 'Profile', path: '/profile', icon: FaInfoCircle },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -19,7 +20,7 @@ function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-40"
+      className="font-nunito bg-white shadow-lg border-b border-gray-100 sticky top-0 z-40"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -30,11 +31,11 @@ function Navbar() {
               whileTap={{ scale: 0.95 }}
               className="flex items-center"
             >
-              <div className="flex items-center justify-center w-10 h-10 bg-linear-to-r from-blue-600 to-teal-600 rounded-full mr-3">
-                <FaHeart className="text-white text-lg" />
+              <div className="flex items-center justify-center w-10 h-10  rounded-full mr-1">
+                <FaPlusCircle className="text-pink-800 text-lg" size={26} />
               </div>
               <h1 className="text-2xl font-bold text-gray-800">
-                Health<span className="text-blue-600">Predict</span>
+                Health<span className="text-pink-800">Predict</span>
               </h1>
             </motion.div>
           </Link>
@@ -50,12 +51,12 @@ function Navbar() {
                     to={item.path}
                     className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                       isActive(item.path)
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                        ? 'text-pink-500'
+                        : 'text-gray-600 hover:text-pink-400'
                     }`}
                   >
-                    <IconComponent className="mr-2" />
-                    {item.name}
+                    <IconComponent className="mr-2" size={20} />
+                    <p className='text-lg'>{item.name}</p>
                   </Link>
                 );
               })}
@@ -64,36 +65,26 @@ function Navbar() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="text-blue-600 hover:text-blue-700 px-4 py-2 rounded-lg font-medium transition-colors duration-300"
-              >
-                Sign In
-              </motion.button>
-            </Link>
-            
             <div className="flex space-x-2">
-              <Link to="/signup">
+              <Link to="/login">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-linear-to-r from-blue-600 to-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center"
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300 flex items-center cursor-pointer"
                 >
                   <FaUser className="mr-2 text-sm" />
-                  Patient
+                  Login
                 </motion.button>
               </Link>
               
-              <Link to="/signup">
+              <Link to="/patient-dashboard">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-white text-blue-600 border-2 border-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-all duration-300 flex items-center"
+                  className="hover:border-green-600 border-2 border-green-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300 flex items-center cursor-pointer"
                 >
-                  <FaUserMd className="mr-2 text-sm" />
-                  Doctor
+                  <FaUserMd className="mr-2 text-sm text-green-500" />
+                  <p className='text-green-500'>Dashboard</p>
                 </motion.button>
               </Link>
             </div>
@@ -131,8 +122,8 @@ function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
                 className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                   isActive(item.path)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-pink-500'
+                    : 'text-gray-600 hover:text-pink-400'
                 }`}
               >
                 <IconComponent className="mr-3" />
@@ -145,27 +136,19 @@ function Navbar() {
             <Link
               to="/login"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-300"
-            >
-              Sign In
-            </Link>
-            
-            <Link
-              to="/signup"
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center px-3 py-2 bg-linear-to-r from-blue-600 to-teal-600 text-white rounded-lg"
+              className="flex items-center px-3 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors duration-300"
             >
               <FaUser className="mr-3" />
-              Join as Patient
+              Login
             </Link>
             
             <Link
-              to="/signup"
+              to="/patient-dashboard"
               onClick={() => setIsMenuOpen(false)}
-              className="flex items-center px-3 py-2 border-2 border-blue-600 text-blue-600 rounded-lg"
+              className="flex items-center px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-300"
             >
               <FaUserMd className="mr-3" />
-              Join as Doctor
+              Dashboard
             </Link>
           </div>
         </div>

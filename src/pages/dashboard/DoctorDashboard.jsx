@@ -158,7 +158,7 @@ const DoctorDashboard = () => {
           className="mb-8"
         >
           <div className="flex items-center mb-4">
-            <div className="flex items-center justify-center w-12 h-12 bg-linear-to-r from-blue-600 to-teal-600 rounded-full mr-4">
+            <div className="flex items-center justify-center w-12 h-12 bg-pink-500 rounded-full mr-4">
               <FaUserMd className="text-white text-xl" />
             </div>
             <div>
@@ -234,7 +234,7 @@ const DoctorDashboard = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Total Patients</span>
-                  <span className="font-bold text-blue-600">{currentPatients.length}</span>
+                  <span className="font-bold text-green-600">{currentPatients.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">High Risk</span>
@@ -391,15 +391,15 @@ const DoctorDashboard = () => {
                   
                   <div className="space-y-3">
                     <div className="flex items-center text-gray-700">
-                      <FaPhone className="mr-3 text-blue-600" />
+                      <FaPhone className="mr-3 text-green-600" />
                       {selectedPatient.phone}
                     </div>
                     <div className="flex items-center text-gray-700">
-                      <FaEnvelope className="mr-3 text-blue-600" />
+                      <FaEnvelope className="mr-3 text-green-600" />
                       {selectedPatient.email}
                     </div>
                     <div className="flex items-center text-gray-700">
-                      <FaCalendar className="mr-3 text-blue-600" />
+                      <FaCalendar className="mr-3 text-green-600" />
                       Last Report: {new Date(selectedPatient.lastReport).toLocaleDateString()}
                     </div>
                   </div>
@@ -445,7 +445,7 @@ const DoctorDashboard = () => {
                     {selectedPatient.reports.map((report, idx) => (
                       <div key={idx} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
                         <div className="flex items-center">
-                          <FaFileMedical className="text-blue-600 mr-3 text-lg" />
+                          <FaFileMedical className="text-green-600 mr-3 text-lg" />
                           <div>
                             <div className="font-medium text-gray-800">{report.name}</div>
                             <div className="text-sm text-gray-600">
@@ -453,7 +453,7 @@ const DoctorDashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <button className="text-blue-600 hover:text-blue-700 transition-colors duration-300">
+                        <button className="text-green-600 hover:text-green-700 transition-colors duration-300">
                           <FaDownload className="text-lg" />
                         </button>
                       </div>
