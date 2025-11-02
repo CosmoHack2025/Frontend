@@ -55,7 +55,7 @@ const UploadProgressModal = ({ isVisible, currentStep, message }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
+        className="bg-white rounded-2xl p-8 max-w-4xl w-full shadow-2xl"
       >
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Processing Your Report</h2>

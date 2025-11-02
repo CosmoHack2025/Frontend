@@ -138,8 +138,10 @@ const PatientDashboard = () => {
   const handleConsentAccept = async () => {
     if (selectedFile && consentAgreed) {
       try {
-        setLoading(true);
         setShowUploadProgress(true);
+        setShowAnalyticsModal(false);
+        setShowRecommendationsModal(false);
+        setShowConsentModal(false);
         
         console.log('Starting automated upload and processing...');
         console.log('Selected file:', selectedFile);
@@ -153,7 +155,7 @@ const PatientDashboard = () => {
         });
         
         // Show success notification
-        showNotification('Report processed successfully! Analysis and recommendations are now available.', 'success');
+        // showNotification('Report processed successfully! Analysis and recommendations are now available.', 'success');
         
         // Reload reports to get the updated list from backend
         try {
@@ -163,18 +165,17 @@ const PatientDashboard = () => {
           }
         } catch (refreshError) {
           console.error('Error refreshing reports:', refreshError);
-          showNotification('Please refresh the page to see your uploaded report.', 'info');
+          // showNotification('Please refresh the page to see your uploaded report.', 'info');
         }
         
       } catch (error) {
         console.error('Upload and processing error:', error);
         
-        showNotification(
-          error.message || 'Failed to process report. Please try again.',
-          'error'
-        );
+        // showNotification(
+        //   error.message || 'Failed to process report. Please try again.',
+        //   'error'
+        // );
       } finally {
-        setLoading(false);
         setShowUploadProgress(false);
         // Reset upload progress state
         setUploadStep('uploading');
@@ -739,7 +740,7 @@ const PatientDashboard = () => {
                 onClick={() => setShowAnalyticsModal(false)}
                 className="text-gray-400 hover:text-gray-600 text-xl"
               >
-                ×
+                x
               </button>
             </div>
 
@@ -762,7 +763,7 @@ const PatientDashboard = () => {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Confidence</p>
+                      <p className="text-sm text-gray-600">Disease Likelihood</p>
                       <p className="font-semibold text-gray-800">
                         {selectedReportAnalytics.diagnosis?.confidence 
                           ? (selectedReportAnalytics.diagnosis.confidence * 100).toFixed(1) + '%'
@@ -965,7 +966,7 @@ const PatientDashboard = () => {
 
       {/* Upload Progress Modal */}
       <UploadProgressModal
-        isOpen={showUploadProgress}
+        isVisible={showUploadProgress}
         currentStep={uploadStep}
         message={uploadMessage}
       />

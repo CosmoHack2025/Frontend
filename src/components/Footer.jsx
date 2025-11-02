@@ -129,8 +129,8 @@ function Footer() {
                   <FaMapMarkerAlt className="text-blue-300" aria-hidden />
                 </div>
                 <div>
-                  <div className="font-medium text-sm text-white">123 Healthcare Ave</div>
-                  <div className="text-xs">Medical District, MD 12345</div>
+                  <div className="font-medium text-sm text-white">IIEST Shibpur</div>
+                  <div className="text-xs">College Road, Howrah-711103</div>
                 </div>
               </div>
 
@@ -139,7 +139,7 @@ function Footer() {
                   <FaPhoneAlt className="text-blue-300" aria-hidden />
                 </div>
                 <a href="tel:+15551234567" className="text-sm text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-300 rounded">
-                  +1 (555) 123-HEALTH
+                  +91 12345 67890
                 </a>
               </div>
 
