@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaHeart, FaBars, FaTimes, FaUserMd, FaUser, FaHome, FaInfoCircle, FaPlusCircle, FaUserAlt, FaEnvelope, FaSignOutAlt, FaAmbulance } from 'react-icons/fa';
+import { FaHeart, FaBars, FaTimes, FaUserMd, FaUser, FaHome, FaInfoCircle, FaPlusCircle, FaUserAlt, FaEnvelope, FaSignOutAlt, FaAmbulance, FaComments } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,6 +14,7 @@ function Navbar() {
     { name: 'Home', path: '/', icon: FaHome },
     { name: 'About', path: '/about', icon: FaInfoCircle },
     { name: 'Emergency', path: '/emergency', icon: FaAmbulance },
+    { name: 'Chat Assistant', path: '/chat', icon: FaComments },
     { name: 'Contact', path: '/contact', icon: FaEnvelope },
   ];
 

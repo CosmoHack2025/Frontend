@@ -12,11 +12,19 @@ A modern, AI-powered healthcare platform built with React and Vite, providing co
 - **Medical Report Analysis**: AI-powered insights and recommendations
 
 ### 👨‍⚕️ Healthcare Services
+- **AI Chat Assistant**: 24/7 healthcare chatbot powered by Google Gemini AI
 - **Doctor Consultations**: Book appointments with specialists
 - **Emergency Services**: Real-time hospital finder with GPS integration
 - **Patient Dashboard**: Comprehensive health tracking and history
 - **Doctor Dashboard**: Patient management and analytics tools
 - **Medical Reports**: Upload, analyze, and track health reports
+
+### 🤖 AI Chat Assistant
+- **24/7 Healthcare Support**: Always available intelligent assistant
+- **Medical Query Processing**: Natural language understanding for health questions
+- **Conversation History**: Persistent chat sessions with context awareness
+- **Multi-Modal Interface**: Floating chat button and dedicated chat page
+- **Export Conversations**: Download chat history for medical records
 
 ### 🚑 Emergency Features
 - **Hospital Finder**: Google Maps integration for nearby hospitals
@@ -113,6 +121,7 @@ src/
 - **`/login`** - User authentication
 - **`/signup`** - User registration
 - **`/emergency`** - Emergency hospital finder
+- **`/chat`** - Full-screen AI healthcare assistant
 - **`/consultation`** - Doctor appointment booking
 - **`/dashboard/patient`** - Patient dashboard
 - **`/dashboard/doctor`** - Doctor dashboard
@@ -139,6 +148,7 @@ const API_BASE_URL = 'http://localhost:9191/api';
 /api/patient/*       - Patient services
 /api/doctor/*        - Doctor services  
 /api/hospital/*      - Emergency services
+/api/chat/*          - AI chatbot services
 /api/reports/*       - Medical reports
 ```
 
