@@ -22,6 +22,7 @@ import { useAuth } from '../../context/AuthContext';
 import PatientBookings from '../../components/bookings/PatientBookings';
 import PatientReports from '../../components/reports/PatientReports';
 import NotificationContainer from '../../components/ui/NotificationContainer';
+import UploadProgressModal from '../../components/ui/UploadProgressModal';
 import useNotification from '../../hooks/useNotification';
 import patientService from '../../utils/patientService';
 import reportService from '../../utils/reportService';
@@ -44,6 +45,11 @@ const PatientDashboard = () => {
   const [selectedReportRecommendations, setSelectedReportRecommendations] = useState(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [recommendationsLoading, setRecommendationsLoading] = useState(false);
+  
+  // Upload progress state
+  const [showUploadProgress, setShowUploadProgress] = useState(false);
+  const [uploadStep, setUploadStep] = useState('uploading');
+  const [uploadMessage, setUploadMessage] = useState('Uploading Report...');
   const [uploadedReports, setUploadedReports] = useState([
     {
       id: 1,
@@ -133,42 +139,46 @@ const PatientDashboard = () => {
     if (selectedFile && consentAgreed) {
       try {
         setLoading(true);
+        setShowUploadProgress(true);
         
-        console.log('Starting upload process...');
+        console.log('Starting automated upload and processing...');
         console.log('Selected file:', selectedFile);
-        console.log('File name:', selectedFile.name);
-        console.log('File size:', selectedFile.size);
-        console.log('File type:', selectedFile.type);
         
-        // Upload report using report service
-        const formData = reportService.createFormData(selectedFile, 'Uploaded from patient dashboard');
-        console.log('FormData created:', formData);
+        const formData = reportService.createFormData(selectedFile, "Uploaded from Patient Dashboard");
+        // Use the automated workflow with progress tracking
+        await reportService.uploadAndProcessReport(formData, (step, message) => {
+          setUploadStep(step);
+          setUploadMessage(message);
+          console.log(`Progress update: ${step} - ${message}`);
+        });
         
-        // Log formData contents for debugging
-        for (let [key, value] of formData.entries()) {
-          console.log(`FormData entry - ${key}:`, value);
-        }
+        // Show success notification
+        showNotification('Report processed successfully! Analysis and recommendations are now available.', 'success');
         
-        const uploadResponse = await reportService.uploadReport(formData);
-        console.log('Upload response:', uploadResponse);
-        
-        if (uploadResponse.success) {
-          // Reload reports to get the updated list from backend
+        // Reload reports to get the updated list from backend
+        try {
           const updatedReportsResponse = await reportService.getPatientReports();
           if (updatedReportsResponse.success) {
             setUploadedReports(updatedReportsResponse.data);
           }
-          
-          // Show success notification
-          showSuccess('Report uploaded successfully! It will be processed shortly.');
-        } else {
-          showError('Upload failed: ' + uploadResponse.message);
+        } catch (refreshError) {
+          console.error('Error refreshing reports:', refreshError);
+          showNotification('Please refresh the page to see your uploaded report.', 'info');
         }
+        
       } catch (error) {
-        console.error('Upload error:', error);
-        showError('Upload failed: ' + error.message);
+        console.error('Upload and processing error:', error);
+        
+        showNotification(
+          error.message || 'Failed to process report. Please try again.',
+          'error'
+        );
       } finally {
         setLoading(false);
+        setShowUploadProgress(false);
+        // Reset upload progress state
+        setUploadStep('uploading');
+        setUploadMessage('Uploading Report...');
         setSelectedFile(null);
         setShowConsentModal(false);
         setConsentAgreed(false);
@@ -238,8 +248,8 @@ const PatientDashboard = () => {
       const analyticsResponse = await reportService.getReportAnalytics(reportId);
       
       if (analyticsResponse.success) {
-        setSelectedReportAnalytics(analyticsResponse.data);
         console.log('Fetched analytics:', analyticsResponse.data);
+        setSelectedReportAnalytics(analyticsResponse.data);
       } else {
         showError('No analytics found for this report. Please analyze it first.');
         setShowAnalyticsModal(false);
@@ -258,9 +268,26 @@ const PatientDashboard = () => {
       setRecommendationsLoading(true);
       setShowRecommendationsModal(true);
       
+      console.log('Generating recommendations for analytics ID:', analyticsId);
+      
+      // First try to get existing recommendations
+      try {
+        const existingRecommendations = await reportService.getRecommendationByAnalytics(analyticsId);
+        if (existingRecommendations.success) {
+          console.log('Found existing recommendations:', existingRecommendations.data);
+          setSelectedReportRecommendations(existingRecommendations.data);
+          showSuccess('Recommendations loaded successfully!');
+          return;
+        }
+      } catch (existingError) {
+        console.log('No existing recommendations, generating new ones...');
+      }
+      
+      // Generate new recommendations if none exist
       const recommendationsResponse = await reportService.generateRecommendations(analyticsId);
       
       if (recommendationsResponse.success) {
+        console.log('Generated new recommendations:', recommendationsResponse.data);
         setSelectedReportRecommendations(recommendationsResponse.data);
         showSuccess('Health recommendations generated successfully!');
       } else {
@@ -590,7 +617,20 @@ const PatientDashboard = () => {
                               View Analytics
                             </button>
                             <button
-                              onClick={() => handleGenerateRecommendations(report.analyticsId)}
+                              onClick={async () => {
+                                try {
+                                  // First get analytics to get the analytics ID
+                                  const analyticsResponse = await reportService.getReportAnalytics(report.id);
+                                  if (analyticsResponse.success) {
+                                    // Then generate recommendations using the analytics ID
+                                    await handleGenerateRecommendations(analyticsResponse.data.id);
+                                  } else {
+                                    showError('Please analyze the report first to get recommendations.');
+                                  }
+                                } catch (error) {
+                                  showError('Please analyze the report first to get recommendations.');
+                                }
+                              }}
                               className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300 text-sm"
                             >
                               Get Recommendations
@@ -715,11 +755,19 @@ const PatientDashboard = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-gray-600">Diagnosis</p>
-                      <p className="font-semibold text-gray-800">{selectedReportAnalytics.diagnosis.prediction}</p>
+                      <p className="font-semibold text-gray-800">
+                        {selectedReportAnalytics.diagnosis?.prediction || 
+                         selectedReportAnalytics.diagnosis || 
+                         'No diagnosis available'}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Confidence</p>
-                      <p className="font-semibold text-gray-800">{(selectedReportAnalytics.diagnosis.confidence * 100).toFixed(1)}%</p>
+                      <p className="font-semibold text-gray-800">
+                        {selectedReportAnalytics.diagnosis?.confidence 
+                          ? (selectedReportAnalytics.diagnosis.confidence * 100).toFixed(1) + '%'
+                          : 'Not available'}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Severity</p>
@@ -737,15 +785,6 @@ const PatientDashboard = () => {
                     </div>
                   </div>
                 </div>
-{/* 
-                <div className="flex justify-end space-x-3">
-                  <button
-                    onClick={() => handleGenerateRecommendations(selectedReportAnalytics.id)}
-                    className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300"
-                  >
-                    Generate Recommendations
-                  </button>
-                </div> */}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500">
@@ -786,18 +825,22 @@ const PatientDashboard = () => {
                   <h3 className="font-semibold text-purple-800 mb-2">AI-Generated Health Recommendations</h3>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-sm text-gray-600">Urgency Level</p>
+                      <p className="text-sm text-gray-600">Status</p>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        selectedReportRecommendations.urgencyLevel === 'high' ? 'bg-red-100 text-red-800' :
-                        selectedReportRecommendations.urgencyLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
+                        selectedReportRecommendations.status === 'generated' ? 'bg-green-100 text-green-800' :
+                        selectedReportRecommendations.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
                       }`}>
-                        {selectedReportRecommendations.urgencyLevel}
+                        {selectedReportRecommendations.status || 'Generated'}
                       </span>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Generated</p>
-                      <p className="text-sm text-gray-800">{new Date(selectedReportRecommendations.createdAt).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-800">
+                        {selectedReportRecommendations.createdAt 
+                          ? new Date(selectedReportRecommendations.createdAt).toLocaleDateString()
+                          : 'Just now'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -806,11 +849,16 @@ const PatientDashboard = () => {
                   <h3 className="font-semibold text-gray-800 mb-3">Recommendations</h3>
                   {selectedReportRecommendations.recommendations ? (
                     <div className="prose prose-sm max-w-none">
-                      {selectedReportRecommendations.recommendations.split('\n').map((line, index) => (
-                        <p key={index} className="mb-2 text-gray-700">
-                          {line}
-                        </p>
-                      ))}
+                      {typeof selectedReportRecommendations.recommendations === 'string' 
+                        ? selectedReportRecommendations.recommendations.split('\n').map((line, index) => (
+                            line.trim() && (
+                              <p key={index} className="mb-2 text-gray-700">
+                                {line}
+                              </p>
+                            )
+                          ))
+                        : <p className="text-gray-700">{JSON.stringify(selectedReportRecommendations.recommendations, null, 2)}</p>
+                      }
                     </div>
                   ) : (
                     <p className="text-gray-600">No recommendations available</p>
@@ -914,6 +962,13 @@ const PatientDashboard = () => {
           </motion.div>
         </div>
       )}
+
+      {/* Upload Progress Modal */}
+      <UploadProgressModal
+        isOpen={showUploadProgress}
+        currentStep={uploadStep}
+        message={uploadMessage}
+      />
     </div>
   );
 };

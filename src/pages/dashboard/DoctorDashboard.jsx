@@ -321,44 +321,6 @@ const DoctorDashboard = () => {
         {/* Tab Content */}
         {activeTab === 'dashboard' && (
           <>
-            {/* Specialty Selection */}
-            <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-8"
-        >
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Specialty Areas</h2>
-            <div className="flex flex-wrap gap-4">
-              {specialties.map((specialty) => {
-                const SpecialtyIcon = getSpecialtyIcon(specialty);
-                const patientCount = patientsBySpecialty[specialty]?.length || 0;
-                
-                return (
-                  <motion.button
-                    key={specialty}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedSpecialty(specialty)}
-                    className={`flex items-center p-4 rounded-xl border-2 transition-all duration-300 ${
-                      selectedSpecialty === specialty
-                        ? 'bg-blue-50 border-blue-500 text-blue-700'
-                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                    <SpecialtyIcon className="text-xl mr-3" />
-                    <div className="text-left">
-                      <div className="font-semibold">{specialty}</div>
-                      <div className="text-sm opacity-75">{patientCount} patients</div>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
-
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Search and Filter */}
           <motion.div 

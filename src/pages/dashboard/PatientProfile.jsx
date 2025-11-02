@@ -139,8 +139,8 @@ const PatientProfile = () => {
 
   const tabs = [
     { id: 'personal', name: 'Personal Info', icon: FaUser },
-    { id: 'medical', name: 'Medical Info', icon: FaHeart },
-    { id: 'reports', name: 'Reports History', icon: FaHistory },
+    // { id: 'medical', name: 'Medical Info', icon: FaHeart },
+    // { id: 'reports', name: 'Reports History', icon: FaHistory },
     { id: 'notifications', name: 'Notifications', icon: FaBell },
     { id: 'security', name: 'Security', icon: FaLock }
   ];

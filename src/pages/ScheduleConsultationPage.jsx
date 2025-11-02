@@ -426,7 +426,7 @@ const ScheduleConsultationPage = () => {
                         <div className="flex-1">
                           <h3 className="font-bold text-lg text-gray-800">{doctor.name}</h3>
                           <p className="text-pink-600 font-medium">{doctor.specialty}</p>
-                          <p className="text-sm text-gray-600">{doctor.experience}</p>
+                          {/* <p className="text-sm text-gray-600">{doctor.experience}</p> */}
                           {doctor.qualification && (
                             <p className="text-xs text-gray-500">{doctor.qualification}</p>
                           )}
@@ -437,12 +437,7 @@ const ScheduleConsultationPage = () => {
                       </div>
                       <p className="text-gray-700 text-sm mb-4 line-clamp-2">{doctor.about}</p>
                       <div className="flex justify-between items-center mb-2">
-                        <div className="flex items-center">
-                          <span className="text-yellow-400">★</span>
-                          <span className="font-semibold ml-1">{doctor.rating}</span>
-                          <span className="text-xs text-gray-500 ml-2">(120+ reviews)</span>
-                        </div>
-                        <span className="font-bold text-green-600">{doctor.consultationFee}</span>
+                        {/* <span className="font-bold text-green-600">{doctor.consultationFee}</span> */}
                       </div>
                       {selectedDoctor?.id === doctor.id && (
                         <div className="mt-3 p-3 bg-pink-50 rounded-lg border border-pink-200">
