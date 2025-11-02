@@ -96,14 +96,6 @@ const ContactPage = () => {
       link: "/about#doctors",
       color: "bg-green-500"
     },
-    {
-      icon: FaHeadset,
-      title: "24/7 Support",
-      description: "Get immediate help from our support team",
-      action: "Get Support",
-      link: "/support",
-      color: "bg-blue-500"
-    }
   ];
 
   const faqs = [
@@ -179,7 +171,7 @@ const ContactPage = () => {
         className="py-16 px-4 -mt-10 relative z-10"
       >
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="flex justify-center mt-6 gap-3">
             {quickActions.map((action, index) => (
               <motion.div
                 key={index}

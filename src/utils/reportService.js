@@ -4,16 +4,32 @@ class ReportService {
   // Patient report methods
   async getPatientReports() {
     try {
+      console.log('ReportService: Fetching patient reports...');
+      console.log('API Base URL:', apiClient.client.defaults.baseURL);
+      console.log('Request URL: /report/my-reports');
+      console.log('With credentials:', apiClient.client.defaults.withCredentials);
+      
       const response = await apiClient.get('/report/my-reports');
+      
+      console.log('Get reports response:', response);
+      console.log('Response data:', response.data);
+      console.log('Response status:', response.success);
       
       return {
         success: true,
-        data: response.data.data || [],
+        data: response.data.data || response.data || [],
         count: response.data.count || 0,
         message: response.data.message || 'Reports retrieved successfully'
       };
     } catch (error) {
       console.error('Error fetching patient reports:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
       if (error.message.includes('403') || error.message.includes('Only patients')) {
         throw new Error('Only patients can view their reports');
       }
@@ -50,15 +66,23 @@ class ReportService {
 
   async uploadReport(formData) {
     try {
+      console.log('ReportService: Starting upload...');
+      console.log('FormData received:', formData);
+      
       // FormData should contain:
-      // - reportFile: PDF file
+      // - file: PDF file (matches backend upload.single("file"))
       // - notes: Optional notes about the report
       
-      const response = await apiClient.post('/report/upload', formData, {
+      // For FormData uploads, let browser set Content-Type automatically (with boundary)
+      const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      console.log('Making POST request to /report/upload');
+      const response = await apiClient.post('/report/upload', formData, config);
+      console.log('Upload response received:', response);
       
       return {
         success: true,
@@ -67,6 +91,13 @@ class ReportService {
       };
     } catch (error) {
       console.error('Error uploading report:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
       if (error.message.includes('403')) {
         throw new Error('Only patients can upload reports');
       }
@@ -100,6 +131,81 @@ class ReportService {
         throw new Error('Please log in to delete reports');
       }
       throw new Error(error.message || 'Failed to delete report');
+    }
+  }
+
+  // Analytics and AI Analysis methods
+  async analyzeReport(reportId) {
+    try {
+      const response = await apiClient.post(`/report/${reportId}/analyze`);
+      
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message || 'Report analyzed successfully'
+      };
+    } catch (error) {
+      console.error('Error analyzing report:', error);
+      if (error.message.includes('404')) {
+        throw new Error('Report not found');
+      }
+      if (error.message.includes('400') && error.message.includes('status')) {
+        throw new Error('Report must be analyzed first (text extraction pending)');
+      }
+      if (error.message.includes('401')) {
+        throw new Error('Please log in to analyze reports');
+      }
+      throw new Error(error.message || 'Failed to analyze report');
+    }
+  }
+
+  async getReportAnalytics(reportId) {
+    try {
+      const response = await apiClient.get(`/report/${reportId}/analytics`);
+      console.log('Analytics response:', response);
+      return {
+        success: true,
+        data: response.data,
+        message: 'Analytics retrieved successfully'
+      };
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      if (error.message.includes('404') && error.message.includes('analytics')) {
+        throw new Error('No analytics found for this report. Please analyze the report first.');
+      }
+      if (error.message.includes('404')) {
+        throw new Error('Report not found');
+      }
+      if (error.message.includes('401')) {
+        throw new Error('Please log in to view analytics');
+      }
+      throw new Error(error.message || 'Failed to fetch analytics');
+    }
+  }
+
+  async generateRecommendations(analyticsId) {
+    try {
+      const response = await apiClient.post('/recommendation/health-recommendations', {
+        analyticsId: analyticsId
+      });
+      
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message || 'Recommendations generated successfully'
+      };
+    } catch (error) {
+      console.error('Error generating recommendations:', error);
+      if (error.message.includes('404')) {
+        throw new Error('Analytics not found');
+      }
+      if (error.message.includes('400') && error.message.includes('diagnosis')) {
+        throw new Error('No diagnosis found. Please analyze the report first.');
+      }
+      if (error.message.includes('401')) {
+        throw new Error('Please log in to generate recommendations');
+      }
+      throw new Error(error.message || 'Failed to generate recommendations');
     }
   }
 
@@ -197,12 +303,38 @@ class ReportService {
     };
   }
 
+  // Debug method to test API connectivity and auth
+  async testApiConnection() {
+    try {
+      console.log('Testing API connection...');
+      console.log('Current cookies:', document.cookie);
+      console.log('API Base URL:', apiClient.client.defaults.baseURL);
+      
+      const response = await apiClient.get('/report/my-reports');
+      console.log('Test response:', response);
+      return response;
+    } catch (error) {
+      console.error('Test API error:', error);
+      throw error;
+    }
+  }
+
   createFormData(file, notes = '') {
+    console.log('Creating FormData with file:', file);
+    console.log('File details:', {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    });
+    
     const formData = new FormData();
-    formData.append('reportFile', file);
+    formData.append('file', file);  // Changed from 'reportFile' to 'file' to match backend
     if (notes.trim()) {
       formData.append('notes', notes.trim());
     }
+    
+    console.log('FormData created successfully');
     return formData;
   }
 }

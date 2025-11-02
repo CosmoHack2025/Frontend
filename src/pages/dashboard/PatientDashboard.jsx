@@ -21,11 +21,14 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import PatientBookings from '../../components/bookings/PatientBookings';
 import PatientReports from '../../components/reports/PatientReports';
+import NotificationContainer from '../../components/ui/NotificationContainer';
+import useNotification from '../../hooks/useNotification';
 import patientService from '../../utils/patientService';
 import reportService from '../../utils/reportService';
 
 const PatientDashboard = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { notifications, showSuccess, showError, showWarning, showInfo, removeNotification } = useNotification();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedFile, setSelectedFile] = useState(null);
   const [showConsentModal, setShowConsentModal] = useState(false);
@@ -33,6 +36,14 @@ const PatientDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [patientProfile, setPatientProfile] = useState(null);
+  
+  // Analytics and Recommendations state
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false);
+  const [selectedReportAnalytics, setSelectedReportAnalytics] = useState(null);
+  const [selectedReportRecommendations, setSelectedReportRecommendations] = useState(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false);
   const [uploadedReports, setUploadedReports] = useState([
     {
       id: 1,
@@ -80,9 +91,21 @@ const PatientDashboard = () => {
         }
 
         // Fetch patient reports using the correct report service
-        const reportsResponse = await reportService.getPatientReports();
-        if (reportsResponse.success) {
-          setUploadedReports(reportsResponse.data);
+        try {
+          console.log('PatientDashboard: Fetching reports...');
+          const reportsResponse = await reportService.getPatientReports();
+          console.log('PatientDashboard: Reports response:', reportsResponse);
+          
+          if (reportsResponse.success) {
+            console.log('PatientDashboard: Setting reports:', reportsResponse.data);
+            setUploadedReports(reportsResponse.data);
+          } else {
+            console.error('PatientDashboard: Reports fetch failed:', reportsResponse);
+          }
+        } catch (reportError) {
+          console.error('PatientDashboard: Error fetching reports:', reportError);
+          // Don't set error state for reports, just log it
+          setUploadedReports([]);
         }
 
       } catch (error) {
@@ -111,9 +134,23 @@ const PatientDashboard = () => {
       try {
         setLoading(true);
         
+        console.log('Starting upload process...');
+        console.log('Selected file:', selectedFile);
+        console.log('File name:', selectedFile.name);
+        console.log('File size:', selectedFile.size);
+        console.log('File type:', selectedFile.type);
+        
         // Upload report using report service
         const formData = reportService.createFormData(selectedFile, 'Uploaded from patient dashboard');
+        console.log('FormData created:', formData);
+        
+        // Log formData contents for debugging
+        for (let [key, value] of formData.entries()) {
+          console.log(`FormData entry - ${key}:`, value);
+        }
+        
         const uploadResponse = await reportService.uploadReport(formData);
+        console.log('Upload response:', uploadResponse);
         
         if (uploadResponse.success) {
           // Reload reports to get the updated list from backend
@@ -122,14 +159,14 @@ const PatientDashboard = () => {
             setUploadedReports(updatedReportsResponse.data);
           }
           
-          // Show success message
-          alert('Report uploaded successfully! It will be processed shortly.');
+          // Show success notification
+          showSuccess('Report uploaded successfully! It will be processed shortly.');
         } else {
-          alert('Upload failed: ' + uploadResponse.message);
+          showError('Upload failed: ' + uploadResponse.message);
         }
       } catch (error) {
         console.error('Upload error:', error);
-        alert('Upload failed. Please try again.');
+        showError('Upload failed: ' + error.message);
       } finally {
         setLoading(false);
         setSelectedFile(null);
@@ -162,10 +199,80 @@ const PatientDashboard = () => {
         setUploadedReports(updatedReportsResponse.data);
       }
       
-      alert('Report deleted successfully!');
+      showSuccess('Report deleted successfully!');
     } catch (error) {
       console.error('Error deleting report:', error);
-      alert('Failed to delete report: ' + error.message);
+      showError('Failed to delete report: ' + error.message);
+    }
+  };
+
+  // Analytics and AI Analysis handlers
+  const handleAnalyzeReport = async (reportId) => {
+    try {
+      setAnalyticsLoading(true);
+      showInfo('Analyzing report with AI... This may take a moment.');
+      
+      const analysisResponse = await reportService.analyzeReport(reportId);
+      
+      if (analysisResponse.success) {
+        showSuccess('Report analysis completed successfully!');
+        // Reload reports to get updated status
+        const updatedReportsResponse = await reportService.getPatientReports();
+        if (updatedReportsResponse.success) {
+          setUploadedReports(updatedReportsResponse.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error analyzing report:', error);
+      showError('Failed to analyze report: ' + error.message);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  };
+
+  const handleViewAnalytics = async (reportId) => {
+    try {
+      setAnalyticsLoading(true);
+      setShowAnalyticsModal(true);
+      
+      const analyticsResponse = await reportService.getReportAnalytics(reportId);
+      
+      if (analyticsResponse.success) {
+        setSelectedReportAnalytics(analyticsResponse.data);
+        console.log('Fetched analytics:', analyticsResponse.data);
+      } else {
+        showError('No analytics found for this report. Please analyze it first.');
+        setShowAnalyticsModal(false);
+      }
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      showError('Failed to load analytics: ' + error.message);
+      setShowAnalyticsModal(false);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  };
+
+  const handleGenerateRecommendations = async (analyticsId) => {
+    try {
+      setRecommendationsLoading(true);
+      setShowRecommendationsModal(true);
+      
+      const recommendationsResponse = await reportService.generateRecommendations(analyticsId);
+      
+      if (recommendationsResponse.success) {
+        setSelectedReportRecommendations(recommendationsResponse.data);
+        showSuccess('Health recommendations generated successfully!');
+      } else {
+        showError('Failed to generate recommendations. Please try again.');
+        setShowRecommendationsModal(false);
+      }
+    } catch (error) {
+      console.error('Error generating recommendations:', error);
+      showError('Failed to generate recommendations: ' + error.message);
+      setShowRecommendationsModal(false);
+    } finally {
+      setRecommendationsLoading(false);
     }
   };
 
@@ -455,15 +562,42 @@ const PatientDashboard = () => {
                         </div>
                       </div>
 
-                      {/* Placeholder for future AI analysis integration */}
-                      {report.status === 'analyzed' && (
-                        <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                          <p className="text-sm text-blue-700">
-                            <FaInfoCircle className="inline mr-1" />
-                            Report has been analyzed. AI predictions will be available soon.
-                          </p>
-                        </div>
-                      )}
+                      {/* AI Analysis Actions */}
+                      <div className="mt-4 flex flex-wrap gap-3">
+                        {report.status === 'uploaded' && (
+                          <button
+                            onClick={() => handleAnalyzeReport(report.id)}
+                            disabled={analyticsLoading}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 text-sm"
+                          >
+                            {analyticsLoading ? (
+                              <>
+                                <FaSpinner className="animate-spin mr-2 inline" />
+                                Analyzing...
+                              </>
+                            ) : (
+                              'Analyze with AI'
+                            )}
+                          </button>
+                        )}
+                        
+                        {report.status === 'analyzed' && (
+                          <>
+                            <button
+                              onClick={() => handleViewAnalytics(report.id)}
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300 text-sm"
+                            >
+                              View Analytics
+                            </button>
+                            <button
+                              onClick={() => handleGenerateRecommendations(report.analyticsId)}
+                              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300 text-sm"
+                            >
+                              Get Recommendations
+                            </button>
+                          </>
+                        )}
+                      </div>
                       
                       {report.status === 'processing' && (
                         <div className="flex items-center justify-center py-8">
@@ -549,6 +683,155 @@ const PatientDashboard = () => {
           <PatientReports />
         )}
       </div>
+
+      {/* Analytics Modal */}
+      {showAnalyticsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Report Analytics</h2>
+              <button
+                onClick={() => setShowAnalyticsModal(false)}
+                className="text-gray-400 hover:text-gray-600 text-xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {analyticsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <FaSpinner className="animate-spin text-2xl text-blue-600 mr-3" />
+                <span>Loading analytics...</span>
+              </div>
+            ) : selectedReportAnalytics ? (
+              <div className="space-y-6">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-blue-800 mb-2">AI Analysis Results</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Diagnosis</p>
+                      <p className="font-semibold text-gray-800">{selectedReportAnalytics.diagnosis.prediction}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Confidence</p>
+                      <p className="font-semibold text-gray-800">{(selectedReportAnalytics.diagnosis.confidence * 100).toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Severity</p>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        selectedReportAnalytics.severity === 'high' ? 'bg-red-100 text-red-800' :
+                        selectedReportAnalytics.severity === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {selectedReportAnalytics.severity}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Analysis Date</p>
+                      <p className="text-sm text-gray-800">{new Date(selectedReportAnalytics.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+{/* 
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => handleGenerateRecommendations(selectedReportAnalytics.id)}
+                    className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300"
+                  >
+                    Generate Recommendations
+                  </button>
+                </div> */}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>No analytics data available</p>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
+
+      {/* Recommendations Modal */}
+      {showRecommendationsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Health Recommendations</h2>
+              <button
+                onClick={() => setShowRecommendationsModal(false)}
+                className="text-gray-400 hover:text-gray-600 text-xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {recommendationsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <FaSpinner className="animate-spin text-2xl text-purple-600 mr-3" />
+                <span>Generating recommendations...</span>
+              </div>
+            ) : selectedReportRecommendations ? (
+              <div className="space-y-6">
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-purple-800 mb-2">AI-Generated Health Recommendations</h3>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Urgency Level</p>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        selectedReportRecommendations.urgencyLevel === 'high' ? 'bg-red-100 text-red-800' :
+                        selectedReportRecommendations.urgencyLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {selectedReportRecommendations.urgencyLevel}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Generated</p>
+                      <p className="text-sm text-gray-800">{new Date(selectedReportRecommendations.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white border border-gray-200 p-4 rounded-lg">
+                  <h3 className="font-semibold text-gray-800 mb-3">Recommendations</h3>
+                  {selectedReportRecommendations.recommendations ? (
+                    <div className="prose prose-sm max-w-none">
+                      {selectedReportRecommendations.recommendations.split('\n').map((line, index) => (
+                        <p key={index} className="mb-2 text-gray-700">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-600">No recommendations available</p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>No recommendations available</p>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
+
+      {/* Notification Container */}
+      <NotificationContainer 
+        notifications={notifications} 
+        onRemove={removeNotification} 
+        position="top-right" 
+      />
 
       {/* Consent Modal */}
       {showConsentModal && (
