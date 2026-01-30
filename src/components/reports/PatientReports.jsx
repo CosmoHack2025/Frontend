@@ -22,6 +22,7 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import reportService from '../../utils/reportService';
+import FormattedText from '../ui/FormattedText';
 
 const PatientReports = () => {
   const { user } = useAuth();
@@ -740,9 +741,10 @@ const PatientReports = () => {
                   {/* Recommendations Content */}
                   <div className="prose prose-gray max-w-none">
                     <div className="bg-linear-to-br from-green-50 to-blue-50 rounded-lg p-6">
-                      <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">
-                        {selectedRecommendations.recommendations || 'No recommendations available'}
-                      </div>
+                      <FormattedText
+                        text={selectedRecommendations.recommendations}
+                        className="text-gray-800"
+                      />
                     </div>
                   </div>
 

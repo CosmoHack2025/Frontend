@@ -21,6 +21,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import PatientBookings from '../../components/bookings/PatientBookings';
 import PatientReports from '../../components/reports/PatientReports';
+import FormattedText from '../../components/ui/FormattedText';
 import NotificationContainer from '../../components/ui/NotificationContainer';
 import UploadProgressModal from '../../components/ui/UploadProgressModal';
 import useNotification from '../../hooks/useNotification';
@@ -803,7 +804,7 @@ const PatientDashboard = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+            className="bg-white rounded-2xl p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800">Health Recommendations</h2>
@@ -849,18 +850,7 @@ const PatientDashboard = () => {
                 <div className="bg-white border border-gray-200 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-800 mb-3">Recommendations</h3>
                   {selectedReportRecommendations.recommendations ? (
-                    <div className="prose prose-sm max-w-none">
-                      {typeof selectedReportRecommendations.recommendations === 'string' 
-                        ? selectedReportRecommendations.recommendations.split('\n').map((line, index) => (
-                            line.trim() && (
-                              <p key={index} className="mb-2 text-gray-700">
-                                {line}
-                              </p>
-                            )
-                          ))
-                        : <p className="text-gray-700">{JSON.stringify(selectedReportRecommendations.recommendations, null, 2)}</p>
-                      }
-                    </div>
+                    <FormattedText text={selectedReportRecommendations.recommendations} />
                   ) : (
                     <p className="text-gray-600">No recommendations available</p>
                   )}
