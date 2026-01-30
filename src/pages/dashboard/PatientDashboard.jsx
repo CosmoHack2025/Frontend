@@ -804,63 +804,100 @@ const PatientDashboard = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-2xl p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+            className="rounded-2xl max-w-5xl w-full max-h-[90vh] bg-white overflow-y-auto shadow-2xl border border-black/5 bg-linear-to-br from-white via-purple-50/40 to-blue-50/40"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Health Recommendations</h2>
-              <button
-                onClick={() => setShowRecommendationsModal(false)}
-                className="text-gray-400 hover:text-gray-600 text-xl"
-              >
-                ×
-              </button>
+            <div className="sticky top-0 z-10 backdrop-blur bg-white/70   border-b border-black/5 px-6 py-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Health Recommendations</h2>
+                  <p className="text-sm text-gray-600">Personalized guidance based on your report analysis</p>
+                </div>
+                <button
+                  onClick={() => setShowRecommendationsModal(false)}
+                  className="h-10 w-10 grid place-items-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
             </div>
 
-            {recommendationsLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <FaSpinner className="animate-spin text-2xl text-purple-600 mr-3" />
-                <span>Generating recommendations...</span>
-              </div>
-            ) : selectedReportRecommendations ? (
-              <div className="space-y-6">
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-purple-800 mb-2">AI-Generated Health Recommendations</h3>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <p className="text-sm text-gray-600">Status</p>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        selectedReportRecommendations.status === 'generated' ? 'bg-green-100 text-green-800' :
-                        selectedReportRecommendations.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {selectedReportRecommendations.status || 'Generated'}
-                      </span>
+            <div className="p-6">
+              {recommendationsLoading ? (
+                <div className="flex items-center justify-center py-10">
+                  <FaSpinner className="animate-spin text-2xl text-purple-600 mr-3" />
+                  <span className="text-gray-700">Generating recommendations...</span>
+                </div>
+              ) : selectedReportRecommendations ? (
+                <div className="space-y-5">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2 rounded-2xl border border-purple-100 bg-white/70 p-5 shadow-sm">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <h3 className="font-semibold text-gray-900">AI Summary</h3>
+                          <p className="text-sm text-gray-600">Easy-to-read recommendations you can act on</p>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                          selectedReportRecommendations.status === 'generated'
+                            ? 'bg-green-50 text-green-800 border-green-200'
+                            : selectedReportRecommendations.status === 'pending'
+                              ? 'bg-yellow-50 text-yellow-800 border-yellow-200'
+                              : 'bg-gray-50 text-gray-800 border-gray-200'
+                        }`}>
+                          {selectedReportRecommendations.status || 'Generated'}
+                        </span>
+                      </div>
+                      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div className="rounded-xl bg-purple-50/70 border border-purple-100 p-3">
+                          <p className="text-xs text-purple-700">Generated</p>
+                          <p className="font-semibold text-gray-900">
+                            {selectedReportRecommendations.createdAt
+                              ? new Date(selectedReportRecommendations.createdAt).toLocaleDateString()
+                              : 'Just now'}
+                          </p>
+                        </div>
+                        <div className="rounded-xl bg-blue-50/70 border border-blue-100 p-3">
+                          <p className="text-xs text-blue-700">Quick tip</p>
+                          <p className="text-gray-800">
+                            Use this as guidance and confirm with a clinician.
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Generated</p>
-                      <p className="text-sm text-gray-800">
-                        {selectedReportRecommendations.createdAt 
-                          ? new Date(selectedReportRecommendations.createdAt).toLocaleDateString()
-                          : 'Just now'}
-                      </p>
+
+                    <div className="rounded-2xl border border-emerald-100 bg-white/70 p-5 shadow-sm">
+                      <h3 className="font-semibold text-gray-900">How to use this</h3>
+                      <ul className="mt-3 space-y-2 text-sm text-gray-700">
+                        <li className="flex gap-2"><span className="text-emerald-600">•</span><span>Start with lifestyle and monitoring steps.</span></li>
+                        <li className="flex gap-2"><span className="text-emerald-600">•</span><span>Follow any urgent/warning items first.</span></li>
+                        <li className="flex gap-2"><span className="text-emerald-600">•</span><span>Share this with your doctor for review.</span></li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-gray-200 bg-white/80 shadow-sm">
+                    <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+                      <h3 className="font-semibold text-gray-900">Recommendations</h3>
+                      <span className="text-xs text-gray-500">Readable • Color-coded</span>
+                    </div>
+                    <div className="p-5">
+                      {selectedReportRecommendations.recommendations ? (
+                        <FormattedText
+                          text={selectedReportRecommendations.recommendations}
+                          className="text-[15px]"
+                        />
+                      ) : (
+                        <p className="text-gray-600">No recommendations available</p>
+                      )}
                     </div>
                   </div>
                 </div>
-
-                <div className="bg-white border border-gray-200 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-800 mb-3">Recommendations</h3>
-                  {selectedReportRecommendations.recommendations ? (
-                    <FormattedText text={selectedReportRecommendations.recommendations} />
-                  ) : (
-                    <p className="text-gray-600">No recommendations available</p>
-                  )}
+              ) : (
+                <div className="text-center py-10 text-gray-500">
+                  <p>No recommendations available</p>
                 </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                <p>No recommendations available</p>
-              </div>
-            )}
+              )}
+            </div>
           </motion.div>
         </div>
       )}

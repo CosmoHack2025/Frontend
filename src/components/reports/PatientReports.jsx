@@ -710,7 +710,7 @@ const PatientReports = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-linear-to-br from-white via-blue-50/30 to-emerald-50/30 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-black/5"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
@@ -720,7 +720,8 @@ const PatientReports = () => {
                   </div>
                   <button
                     onClick={() => setShowRecommendationsModal(false)}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="h-10 w-10 grid place-items-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-white/70 transition-colors"
+                    aria-label="Close"
                   >
                     ✕
                   </button>
